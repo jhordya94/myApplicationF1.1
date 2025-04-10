@@ -1,3 +1,26 @@
 <resources>
-    <string name="app_name">myApplicationF1.1</string>
+        <string name="app_name">Formula 1 APP</string>
+        <string name="pilot_name_1">Max</string>
+        <string name="pilot_name_2">Max</string>
+        <string name="pilot_name_3">Max</string>
+        <string name="pilot_name_4">Max</string>
+        <string name="pilot_name_5">Max</string>
+        <string name="pilot_name_6">Max</string>
+        <string name="pilot_name_7">Max</string>
+        <string name="pilot_name_8">Max</string>
+        <string name="pilot_name_9">Max</string>
+        <string name="pilot_description_1">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="pilot_description_2">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="pilot_description_3">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="pilot_description_4">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="pilot_description_5">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="pilot_description_6">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="pilot_description_7">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="pilot_description_8">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="pilot_description_9">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="about_pilot">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="years_old">Arial 1212 Arial 1212 Arial 1212</string>
+        <string name="expand_button_content_description">Arial 1212 Arial 1212 Arial 1212
+        </string>
 </resources>
+
