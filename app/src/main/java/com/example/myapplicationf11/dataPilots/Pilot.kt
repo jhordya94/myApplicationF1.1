@@ -11,7 +11,7 @@ data class Pilots(
     val imageResourceId: Int,
     val name: String,
     val age: Int,
-    val hobbies: String
+    val escuderia: String
 )
 
 val pilotList = mutableStateListOf(

@@ -48,7 +48,7 @@ fun Formula1App() {
     var showDialog by remember { mutableStateOf(false) }
     var name by remember { mutableStateOf("") }
     var age by remember { mutableStateOf("") }
-    var hobbies by remember { mutableStateOf("") }
+    var escuderia by remember { mutableStateOf("") }
     var pilotoEnEdicion by remember { mutableStateOf<Pilots?>(null) }
 
     Scaffold(
@@ -58,7 +58,7 @@ fun Formula1App() {
                 pilotoEnEdicion = null
                 name = ""
                 age = ""
-                hobbies = ""
+                escuderia = ""
                 showDialog = true
             }) {
                 Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Agregar piloto")
@@ -71,14 +71,14 @@ fun Formula1App() {
                 onDismissRequest = { showDialog = false },
                 confirmButton = {
                     TextButton(onClick = {
-                        if (name.isNotBlank() && age.isNotBlank() && hobbies.isNotBlank()) {
+                        if (name.isNotBlank() && age.isNotBlank() && escuderia.isNotBlank()) {
                             if (pilotoEnEdicion == null) {
                                 pilotList.add(
                                     Pilots(
                                         imageResourceId = R.drawable.f1logo,
                                         name = name,
                                         age = age.toIntOrNull() ?: 0,
-                                        hobbies = hobbies
+                                        escuderia = escuderia
                                     )
                                 )
                             } else {
@@ -87,7 +87,7 @@ fun Formula1App() {
                                     pilotList[index] = pilotoEnEdicion!!.copy(
                                         name = name,
                                         age = age.toIntOrNull() ?: 0,
-                                        hobbies = hobbies
+                                        escuderia = escuderia
                                     )
                                 }
                             }
@@ -107,7 +107,7 @@ fun Formula1App() {
                     Column {
                         OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Nombre") })
                         OutlinedTextField(value = age, onValueChange = { age = it }, label = { Text("Edad") })
-                        OutlinedTextField(value = hobbies, onValueChange = { hobbies = it }, label = { Text("Hobbies") })
+                        OutlinedTextField(value = escuderia, onValueChange = { escuderia = it }, label = { Text("Escuderia") })
                     }
                 }
             )
@@ -121,7 +121,7 @@ fun Formula1App() {
                         pilotoEnEdicion = piloto
                         name = piloto.name
                         age = piloto.age.toString()
-                        hobbies = piloto.hobbies
+                        escuderia = piloto.escuderia
                         showDialog = true
                     },
                     onDelete = { pilotList.remove(piloto) },
@@ -160,7 +160,7 @@ fun pilotoItem(
                 pilotoItemButton(expanded = expanded, onClick = { expanded = !expanded })
             }
             if (expanded) {
-                pilotoHobby(pilots.hobbies)
+                pilotoHobby(pilots.escuderia)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
