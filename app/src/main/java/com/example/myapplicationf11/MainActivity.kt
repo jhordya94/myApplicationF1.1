@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -13,6 +12,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,10 +26,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.myapplicationf11.ExternaLibraries.ExpandLess
 import com.example.myapplicationf11.dataPilots.pilotList
 import com.example.myapplicationf11.dataPilots.Pilots
-import com.example.myapplicationf11.dataPilots.pilotList
 import com.example.myapplicationf11.ui.theme.F1Theme
 
 class MainActivity : ComponentActivity() {
@@ -35,9 +35,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             F1Theme {
-                Surface(
-                    modifier = Modifier.fillMaxSize()
-                ) {
+                Surface(modifier = Modifier.fillMaxSize()) {
                     Formula1App()
                 }
             }
@@ -47,30 +45,86 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Formula1App() {
+    var showDialog by remember { mutableStateOf(false) }
+    var name by remember { mutableStateOf("") }
+    var age by remember { mutableStateOf("") }
+    var hobbies by remember { mutableStateOf("") }
+    var pilotoEnEdicion by remember { mutableStateOf<Pilots?>(null) }
+
     Scaffold(
-        topBar = {
-            TopAppBar()
-        },
+        topBar = { TopAppBar() },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                // Añadir nuevo piloto al hacer clic
-                pilotList.add(
-                    Pilots(
-                        imageResourceId = R.drawable.f1logo,
-                        name = "Nuevo Piloto",
-                        age = 20,
-                        hobbies = "Descripción del nuevo piloto"
-                    )
-                )
+                pilotoEnEdicion = null
+                name = ""
+                age = ""
+                hobbies = ""
+                showDialog = true
             }) {
-                Icon(imageVector = Icons.Default.ExpandMore, contentDescription = "Agregar piloto")
+                Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Agregar piloto")
             }
         }
-    ) { it ->
-        LazyColumn(contentPadding = it) {
+    ) { paddingValues ->
+
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                confirmButton = {
+                    TextButton(onClick = {
+                        if (name.isNotBlank() && age.isNotBlank() && hobbies.isNotBlank()) {
+                            if (pilotoEnEdicion == null) {
+                                pilotList.add(
+                                    Pilots(
+                                        imageResourceId = R.drawable.f1logo,
+                                        name = name,
+                                        age = age.toIntOrNull() ?: 0,
+                                        hobbies = hobbies
+                                    )
+                                )
+                            } else {
+                                val index = pilotList.indexOf(pilotoEnEdicion)
+                                if (index != -1) {
+                                    pilotList[index] = pilotoEnEdicion!!.copy(
+                                        name = name,
+                                        age = age.toIntOrNull() ?: 0,
+                                        hobbies = hobbies
+                                    )
+                                }
+                            }
+                            showDialog = false
+                        }
+                    }) {
+                        Text("Guardar")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("Cancelar")
+                    }
+                },
+                title = { Text(if (pilotoEnEdicion == null) "Agregar piloto" else "Editar piloto") },
+                text = {
+                    Column {
+                        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Nombre") })
+                        OutlinedTextField(value = age, onValueChange = { age = it }, label = { Text("Edad") })
+                        OutlinedTextField(value = hobbies, onValueChange = { hobbies = it }, label = { Text("Hobbies") })
+                    }
+                }
+            )
+        }
+
+        LazyColumn(contentPadding = paddingValues) {
             items(pilotList) { piloto ->
                 pilotoItem(
                     pilots = piloto,
+                    onEdit = {
+                        pilotoEnEdicion = piloto
+                        name = piloto.name
+                        age = piloto.age.toString()
+                        hobbies = piloto.hobbies
+                        showDialog = true
+                    },
+                    onDelete = { pilotList.remove(piloto) },
                     modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
                 )
             }
@@ -81,12 +135,12 @@ fun Formula1App() {
 @Composable
 fun pilotoItem(
     pilots: Pilots,
+    onEdit: () -> Unit,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
-    Card(
-        modifier = modifier
-    ) {
+    Card(modifier = modifier) {
         Column(
             modifier = Modifier.animateContentSize(
                 animationSpec = spring(
@@ -103,53 +157,44 @@ fun pilotoItem(
                 pilotoIcon(pilots.imageResourceId)
                 pilotoInformation(pilots.name, pilots.age)
                 Spacer(Modifier.weight(1f))
-                pilotoItemButton(
-                    expanded = expanded,
-                    onClick = { expanded = !expanded },
-                )
+                pilotoItemButton(expanded = expanded, onClick = { expanded = !expanded })
             }
             if (expanded) {
                 pilotoHobby(pilots.hobbies)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = dimensionResource(R.dimen.padding_small)),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = onEdit) { Text("Editar") }
+                    TextButton(onClick = onDelete) { Text("Eliminar") }
+                }
             }
         }
     }
 }
 
 @Composable
-fun pilotoInformation(
-    pilotoName: String,
-    pilotoAge: Int,
-    modifier: Modifier = Modifier
-) {
+fun pilotoInformation(pilotoName: String, pilotoAge: Int, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
             text = pilotoName,
             style = MaterialTheme.typography.displayMedium,
             modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
         )
-        Text(
-            text = "Edad: $pilotoAge",
-            style = MaterialTheme.typography.bodyLarge
-        )
+        Text(text = "Edad: $pilotoAge", style = MaterialTheme.typography.bodyLarge)
     }
 }
 
 @Composable
-fun pilotoHobby(
-    pilotoHobby: String,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier.padding(dimensionResource(R.dimen.padding_small))
-    ) {
+fun pilotoHobby(pilotoHobby: String, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.padding(dimensionResource(R.dimen.padding_small))) {
         Text(
             text = stringResource(R.string.about_pilot),
             style = MaterialTheme.typography.labelSmall
         )
-        Text(
-            text = pilotoHobby,
-            style = MaterialTheme.typography.bodyLarge
-        )
+        Text(text = pilotoHobby, style = MaterialTheme.typography.bodyLarge)
     }
 }
 
@@ -159,10 +204,7 @@ private fun pilotoItemButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    IconButton(
-        onClick = onClick,
-        modifier = modifier
-    ) {
+    IconButton(onClick = onClick, modifier = modifier) {
         Icon(
             imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
             contentDescription = stringResource(R.string.expand_button_content_description),
@@ -176,9 +218,7 @@ private fun pilotoItemButton(
 fun TopAppBar(modifier: Modifier = Modifier) {
     CenterAlignedTopAppBar(
         title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     modifier = Modifier
                         .size(dimensionResource(R.dimen.image_size))
@@ -186,10 +226,7 @@ fun TopAppBar(modifier: Modifier = Modifier) {
                     painter = painterResource(R.drawable.f1logo),
                     contentDescription = null
                 )
-                Text(
-                    text = stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.displayLarge
-                )
+                Text(text = stringResource(R.string.app_name), style = MaterialTheme.typography.displayLarge)
             }
         },
         modifier = modifier
@@ -197,10 +234,7 @@ fun TopAppBar(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun pilotoIcon(
-    @DrawableRes pilotoIcon: Int,
-    modifier: Modifier = Modifier
-) {
+fun pilotoIcon(@DrawableRes pilotoIcon: Int, modifier: Modifier = Modifier) {
     Image(
         modifier = modifier
             .size(dimensionResource(R.dimen.image_size))
@@ -210,44 +244,6 @@ fun pilotoIcon(
         painter = painterResource(pilotoIcon),
         contentDescription = null
     )
-}
-
-@Composable
-fun pilotoInformation(
-    @StringRes pilotoName: Int,
-    pilotoAge: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier) {
-        Text(
-            text = stringResource(pilotoName),
-            style = MaterialTheme.typography.displayMedium,
-            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
-        )
-        Text(
-            text = stringResource(R.string.years_old, pilotoAge),
-            style = MaterialTheme.typography.bodyLarge
-        )
-    }
-}
-
-@Composable
-fun pilotoHobby(
-    @StringRes pilotoHobby: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(R.string.about_pilot),
-            style = MaterialTheme.typography.labelSmall
-        )
-        Text(
-            text = stringResource(pilotoHobby),
-            style = MaterialTheme.typography.bodyLarge
-        )
-    }
 }
 
 @Preview
