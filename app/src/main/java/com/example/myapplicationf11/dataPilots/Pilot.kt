@@ -2,23 +2,25 @@ package com.example.myapplicationf11.dataPilots
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.myapplicationf11.R
+import androidx.compose.runtime.mutableStateListOf
 
-data class Pilots (
-    @DrawableRes val imageResourceId: Int,
-    @StringRes val name: Int,
+
+data class Pilots(
+    val imageResourceId: Int,
+    val name: String,
     val age: Int,
-    @StringRes val hobbies: Int
+    val hobbies: String
 )
 
-val Pilot = listOf(
-    Pilots(R.drawable.f1logo, R.string.pilot_name_1, 2, R.string.pilot_description_1),
-    Pilots(R.drawable.f1logo, R.string.pilot_name_2, 16, R.string.pilot_description_2),
-    Pilots(R.drawable.f1logo, R.string.pilot_name_3, 2, R.string.pilot_description_3),
-    Pilots(R.drawable.f1logo, R.string.pilot_name_4, 8, R.string.pilot_description_4),
-    Pilots(R.drawable.f1logo, R.string.pilot_name_5, 8, R.string.pilot_description_5),
-    Pilots(R.drawable.f1logo, R.string.pilot_name_6, 14, R.string.pilot_description_6),
-    Pilots(R.drawable.f1logo, R.string.pilot_name_7, 2, R.string.pilot_description_7),
-    Pilots(R.drawable.f1logo, R.string.pilot_name_8, 7, R.string.pilot_description_8),
-    Pilots(R.drawable.f1logo, R.string.pilot_name_9, 4, R.string.pilot_description_9)
+val pilotList = mutableStateListOf(
+    Pilots(R.drawable.f1logo, "Max Verstappen", 25, "Es el León Holandés"),
+    Pilots(R.drawable.f1logo, "Piloto 1", 30, "Descripción"),
+    Pilots(R.drawable.f1logo, "Max", 24, "Arial 1212 Arial 1212 Arial 1212"),
+    Pilots(R.drawable.f1logo, "Max", 24, "Arial 1212 Arial 1212 Arial 1212"),
+    Pilots(R.drawable.f1logo, "Max", 24, "Arial 1212 Arial 1212 Arial 1212")
 )
+
+
+
