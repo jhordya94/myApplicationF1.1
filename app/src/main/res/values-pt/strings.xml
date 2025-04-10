@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aplicativo Fórmula 1</string>
+
+    <string name="pilot_name_1">Max Verstappen</string>
+    <string name="pilot_name_2">Piloto 1</string>
+    <string name="pilot_name_3">Max</string>
+    <string name="pilot_name_4">Max</string>
+    <string name="pilot_name_5">Max</string>
+    <string name="pilot_name_6">Max</string>
+    <string name="pilot_name_7">Max</string>
+    <string name="pilot_name_8">Max</string>
+    <string name="pilot_name_9">Max</string>
+
+    <string name="pilot_description_1">É o Leão Holandês</string>
+    <string name="pilot_description_2">Descrição</string>
+    <string name="pilot_description_3">Arial 1212 Arial 1212 Arial 1212</string>
+    <string name="pilot_description_4">Arial 1212 Arial 1212 Arial 1212</string>
+    <string name="pilot_description_5">Arial 1212 Arial 1212 Arial 1212</string>
+    <string name="pilot_description_6">Arial 1212 Arial 1212 Arial 1212</string>
+    <string name="pilot_description_7">Arial 1212 Arial 1212 Arial 1212</string>
+    <string name="pilot_description_8">Arial 1212 Arial 1212 Arial 1212</string>
+    <string name="pilot_description_9">Arial 1212 Arial 1212 Arial 1212</string>
+
+    <string name="about_pilot">Sobre o piloto</string>
+    <string name="years_old">Idade</string>
+    <string name="expand_button_content_description">O R22 foi feito só para ele</string>
+
+    <string name="pilot_name_new">Novo Piloto</string>
+    <string name="pilot_description_new">Descrição do novo piloto</string>
+</resources>
