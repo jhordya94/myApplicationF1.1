@@ -15,12 +15,14 @@ data class Pilots(
 )
 
 val pilotList = mutableStateListOf(
-    Pilots(R.drawable.f1logo, "Max Verstappen", 25, "Es el León Holandés"),
-    Pilots(R.drawable.f1logo, "Piloto 1", 30, "Descripción"),
-    Pilots(R.drawable.f1logo, "Max", 24, "Arial 1212 Arial 1212 Arial 1212"),
-    Pilots(R.drawable.f1logo, "Max", 24, "Arial 1212 Arial 1212 Arial 1212"),
-    Pilots(R.drawable.f1logo, "Max", 24, "Arial 1212 Arial 1212 Arial 1212")
+    Pilots(R.drawable.max1, "Max Verstappen", 25, "Corre en Red Bull"),
+    Pilots(R.drawable.yuki, "Yuki Tsunoda", 30, "Corre en Red Bull"),
+    Pilots(R.drawable.leclerc, "Charles Leclerc", 24, "Corre en Ferrari"),
+    Pilots(R.drawable.lewis, "Lewis Hamilton", 24, "Corre en Ferrari"),
+    Pilots(R.drawable.lando, "Lando Norris", 24, "Corre en McLaren")
 )
+
+
 
 
 
